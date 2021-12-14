@@ -1,7 +1,7 @@
 # Surreal Apes
 
 <p align="center">
-  <img src="./readme/logo.jpg">
+  <img src="./readme/logo.png">
 </p>
 
 A generative art project
