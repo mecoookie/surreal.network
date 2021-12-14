@@ -5,13 +5,24 @@ Open-sourced for transparency
 
 ## Official Links
 
-[surreal.network](https://surreal.network/)
+---
 
-[SURREAL ERC721 Verified Smart Contract](https://etherscan.io/address/0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98)
+- [Discord](https://discord.gg/mk5sRSngsf)
 
-[SurrealMintPassFactory ERC1155 Verified Smart Contract](https://etherscan.io/address/0x18d0e051317e04ae96314c372bd35220460eec62)
+- [Twitter](https://twitter.com/surrealapes)
 
-**Please make sure you are always interacting with the contract you expect**
+- [surreal.network](https://surreal.network/)
+
+- [SURREAL APES on Opensea](https://opensea.io/collection/surrealapes)
+
+- [Surreal.sol ERC721 Verified Smart Contract](https://etherscan.io/address/0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98)
+
+- [SURREAL MINT PASS on Opensea](https://opensea.io/collection/surreal-mint-pass)
+
+- [SurrealMintPassFactory.sol ERC1155 Verified Smart Contract](https://etherscan.io/address/0x18d0e051317e04ae96314c372bd35220460eec62)
+
+**Make sure you are always interacting with the contracts you expect**
+![Contract Interaction Example](./readme/contract_interaction.png)
 
 ## Core Components
 
