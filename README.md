@@ -126,7 +126,7 @@ When creating new restrictions/requiremets for signing, update the signature on 
 Minter interacts with `0x18d0e051317e04ae96314c372bd35220460eec62`
 
 1. Our `SurrealMintPassFactory` allows us to create new, independently priced and limited, ERC1155 Mint-Pass tokens. Each token comes with its own generative art for our holders.
-2. When visiting our web3 site during a mint period, users will be able to mint a limited amount of mint passes per wallet, based on some requirement (ownership or otherwise. See [SignedMinting.sol](#signedmintingsol)
+2. When visiting our web3 site during a mint period, users will be able to mint a limited amount of mint passes per wallet, based on some requirement (ownership or otherwise. See [SignedMinting.sol](#signedmintingsol))
 
 ### Redeeming a Surreal Ape
 
@@ -135,6 +135,14 @@ Minter interacts with `0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98`
 1. Holders of our `SurrealMintPass` can log into our site and select which Mint-pass they would like to burn. During redemption, holders also choose which NFT they'd like to create a SURREAL APE derivative from.
 2. A claim transaction is created (gas is required). The claim transaction burns the holders Mint Pass and drops an unrevealed SURREAL APE erc721 into their wallet.
 3. Our GANs system is invoked. The best image is hand-selected and set as metadata for the ERC721.
+
+## FAQ
+
+---
+
+Q. How do I know my assets are safe?  
+A. The best way is to always make sure you are interacting with the contract you expect. In each "How it works" section above, the expected contract interaction address is listed at the top. **Always which address metamask is interacting with prior to signing a transaction**
+![./readme/contract_interaction.png](Metamask Interaction)
 
 ## To do
 
