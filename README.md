@@ -82,7 +82,11 @@ contract SignedMinting {
 
 ---
 
-### AccessControlEnumerable
+### AccessControlEnumerable.sol
+
+---
+
+An @openzeppelin contract
 
 #### `DEFAULT_ADMIN_ROLE`
 
