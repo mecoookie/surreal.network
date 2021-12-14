@@ -3,6 +3,16 @@
 A GANS generative art project  
 Open-sourced for transparency
 
+## Official Links
+
+[surreal.network](https://surreal.network/)
+
+[SURREAL ERC721 Verified Smart Contract](https://etherscan.io/address/0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98)
+
+[SurrealMintPassFactory ERC1155 Verified Smart Contract](https://etherscan.io/address/0x18d0e051317e04ae96314c372bd35220460eec62)
+
+**Please make sure you are always interacting with the contract you expect**
+
 ## Core Components
 
 ---
@@ -102,6 +112,25 @@ Thus any backend controller by surreal.network has the ability to first confirm 
 
 **Important**  
 When creating new restrictions/requiremets for signing, update the signature on contract using `_setMintingSigner`. If not updated: old signatures (prior restrictions) will still be valid.
+
+## How it works
+
+---
+
+### Minting a Mint Pass
+
+Minter interacts with `0x18d0e051317e04ae96314c372bd35220460eec62`
+
+1. Our `SurrealMintPassFactory` allows us to create new, independently priced and limited, ERC1155 Mint-Pass tokens. Each token comes with its own generative art for our holders.
+2. When visiting our web3 site during a mint period, users will be able to mint a limited amount of mint passes per wallet, based on some requirement (ownership or otherwise. See [SignedMinting.sol](#signedmintingsol)
+
+### Redeeming a Surreal Ape
+
+Minter interacts with `0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98`
+
+1. Holders of our `SurrealMintPass` can log into our site and select which Mint-pass they would like to burn. During redemption, holders also choose which NFT they'd like to create a SURREAL APE derivative from.
+2. A claim transaction is created (gas is required). The claim transaction burns the holders Mint Pass and drops an unrevealed SURREAL APE erc721 into their wallet.
+3. Our GANs system is invoked. The best image is hand-selected and set as metadata for the ERC721.
 
 ## To do
 
