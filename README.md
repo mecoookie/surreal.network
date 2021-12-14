@@ -143,7 +143,7 @@ Minter interacts with `0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98`
 Q. How do I know my assets are safe?  
 A. The best way is to always make sure you are interacting with the contract you expect. In each "How it works" section above, the expected contract interaction address is listed at the top. **Always which address metamask is interacting with prior to signing a transaction**
 
-![./readme/contract_interaction.png](MetamaskInteraction)
+![Contract Interaction](./readme/contract_interaction.png)
 
 ## To do
 
