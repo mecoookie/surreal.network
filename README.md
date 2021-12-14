@@ -148,8 +148,9 @@ Minter interacts with `0x18d0e051317e04ae96314c372bd35220460eec62`
 Minter interacts with `0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98`
 
 1. Holders of our `SurrealMintPass` can log into our site and select which Mint-pass they would like to burn. During redemption, holders also choose which NFT they'd like to create a SURREAL APE derivative from.
-2. A claim transaction is created (gas is required). The claim transaction burns the holders Mint Pass and drops an unrevealed SURREAL APE erc721 into their wallet.
-3. Our GANs system is invoked. The best image is hand-selected and set as metadata for the ERC721.
+2. The Mint Pass contract is configured to allow the Surreal ERC721 contract to burn Mint Pass tokens. This is the **only** address allowed to burn Mint Passes.
+3. A claim transaction is created (gas is required). The claim transaction burns the holders Mint Pass and drops an unrevealed SURREAL APE erc721 into their wallet.
+4. Our GANs system is invoked. The best image is hand-selected and set as metadata for the ERC721.
 
 ## FAQ
 
