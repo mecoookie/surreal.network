@@ -5,28 +5,49 @@ Surreal Apes
   <img src="./readme/logo.png">
 </p>
 
-A generative art project
-
 ## Official Links
 
 ---
 
-- [Discord](https://discord.gg/mk5sRSngsf)
+[surreal.network](https://surreal.network/)
 
+### Social
+
+- [Discord](https://discord.gg/mk5sRSngsf)
 - [Twitter](https://twitter.com/surrealapes)
 
-- [surreal.network](https://surreal.network/)
-
-- [SURREAL APES on Opensea](https://opensea.io/collection/surrealapes)
+### Contracts
 
 - [Surreal.sol ERC721 Verified Smart Contract](https://etherscan.io/address/0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98)
-
-- [SURREAL MINT PASS on Opensea](https://opensea.io/collection/surreal-mint-pass)
-
 - [SurrealMintPassFactory.sol ERC1155 Verified Smart Contract](https://etherscan.io/address/0x18d0e051317e04ae96314c372bd35220460eec62)
+
+### Collections
+
+- [SURREAL APES on Opensea](https://opensea.io/collection/surrealapes)
+- [Surreal Mint-Pass on Opensea](https://opensea.io/collection/surreal-mint-pass)
 
 **Make sure you are always interacting with the contracts you expect**
 ![Contract Interaction Example](./readme/contract_interaction.png)
+
+## How it works
+
+---
+
+### Minting a Mint Pass
+
+Minter interacts with `0x18d0e051317e04ae96314c372bd35220460eec62`
+
+1. Our `SurrealMintPassFactory` allows us to create new, independently priced and limited, ERC1155 Mint-Pass tokens. Each token comes with its own generative art for our holders.
+2. When visiting our web3 site during a mint period, users will be able to mint a limited amount of mint passes per wallet, based on some requirement (ownership or otherwise. See [SignedMinting.sol](#signedmintingsol))
+
+### Redeeming a Surreal Ape
+
+Minter interacts with `0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98`
+
+1. Holders of our `SurrealMintPass` can log into our site and select which Mint-pass they would like to burn. During redemption, holders also choose which NFT they'd like to create a SURREAL APE derivative from.
+2. The Mint Pass contract is configured to allow the Surreal ERC721 contract to burn Mint Pass tokens. This is the **only** address allowed to burn Mint Passes.
+3. A claim transaction is created (gas is required). The claim transaction burns the holders Mint Pass and drops an unrevealed SURREAL APE erc721 into their wallet.
+4. Our GANs system is invoked. The best image is hand-selected and set as metadata for the ERC721.
 
 ## Core Components
 
@@ -132,26 +153,6 @@ Thus any backend controller by surreal.network has the ability to first confirm 
 **Important**  
 When creating new restrictions/requiremets for signing, update the signature on contract using `_setMintingSigner`. If not updated: old signatures (prior restrictions) will still be valid.
 
-## How it works
-
----
-
-### Minting a Mint Pass
-
-Minter interacts with `0x18d0e051317e04ae96314c372bd35220460eec62`
-
-1. Our `SurrealMintPassFactory` allows us to create new, independently priced and limited, ERC1155 Mint-Pass tokens. Each token comes with its own generative art for our holders.
-2. When visiting our web3 site during a mint period, users will be able to mint a limited amount of mint passes per wallet, based on some requirement (ownership or otherwise. See [SignedMinting.sol](#signedmintingsol))
-
-### Redeeming a Surreal Ape
-
-Minter interacts with `0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98`
-
-1. Holders of our `SurrealMintPass` can log into our site and select which Mint-pass they would like to burn. During redemption, holders also choose which NFT they'd like to create a SURREAL APE derivative from.
-2. The Mint Pass contract is configured to allow the Surreal ERC721 contract to burn Mint Pass tokens. This is the **only** address allowed to burn Mint Passes.
-3. A claim transaction is created (gas is required). The claim transaction burns the holders Mint Pass and drops an unrevealed SURREAL APE erc721 into their wallet.
-4. Our GANs system is invoked. The best image is hand-selected and set as metadata for the ERC721.
-
 ## FAQ
 
 ---
@@ -169,3 +170,4 @@ A. The best way is to always make sure you are interacting with the contract you
 - [ ] Connect mint pass contract to frontend for minting
 - [ ] Add redemption+burn to frontend
 - [ ] Create token-gated dashboard access for managing mint-passes and revealing SURREAL tokens
+- [ ] Discord notifications for redemptions and reveals
