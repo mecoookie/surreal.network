@@ -1,0 +1,45 @@
+service: mint-signer
+frameworkVersion: "2"
+variablesResolutionMode: 20210326
+
+custom:
+  customDomain:
+    domainName: api.harmonize.gg
+    basePath: "surreal/mint"
+    certificateName: "*.harmonize.gg"
+    createRoute53Record: true
+    endpointType: "regional"
+    apiType: http
+    securityPolicy: tls_1_2
+    stage: ${self:provider.stage}
+
+package:
+  include:
+    - wallet.json
+    - BAYC.json
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: "20201221"
+  stage: prod
+  timeout: 29
+  # environment:
+  #   WALLET_PASSWORD: ${file(./secrets.yml):WALLET_PASSWORD}
+  #   ALCHEMY: ${file(./secrets.yml):ALCHEMY}
+
+functions:
+  sign:
+    handler: signer.handler
+    events:
+      - httpApi:
+          method: get
+          path: /sign
+          cors: true
+    environment:
+
+plugins:
+  - serverless-lift
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-domain-manager

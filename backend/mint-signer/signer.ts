@@ -1,0 +1,74 @@
+import { APIGatewayEvent } from 'aws-lambda';
+import walletJson from './wallet.json';
+import BAYC from './BAYC.json';
+import { Contract, Signature, Wallet } from 'ethers';
+import { sanitizedAddress } from './sanitize';
+import { JsonRpcProvider } from '@ethersproject/providers';
+
+const signingWallet: Wallet = Wallet.fromEncryptedJsonSync(
+  JSON.stringify(walletJson),
+  process.env.WALLET_PASSWORD ?? ''
+);
+
+const BAYC_ADDRESS = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
+
+const web3Provider = new JsonRpcProvider(process.env.ALCHEMY, 'homestead');
+
+const generateSignature = async (addressString: string) => {
+  return await signingWallet.signMessage(sanitizedAddress(addressString));
+};
+
+interface SignatureRequest {
+  address: string;
+}
+
+const verifyAddress = async (address: string) => {
+  const contract = new Contract(BAYC_ADDRESS, BAYC, web3Provider);
+  return (await contract.balanceOf(address)) > 0;
+};
+
+const unauthorizedMessage = 'You must have a BAYC to mint';
+
+const handler = async (event: APIGatewayEvent) => {
+  if (!event.body) {
+    return {
+      statusCode: 400
+    };
+  }
+
+  try {
+    const request: SignatureRequest = JSON.parse(event.body);
+
+    if (!(await verifyAddress(request.address))) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: unauthorizedMessage
+        })
+      };
+    }
+
+    const signature = await generateSignature(
+      sanitizedAddress(request.address)
+    );
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        signature
+      })
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: 'Something went terribly wrong'
+      })
+    };
+  }
+};
+
+module.exports = {
+  handler
+};
