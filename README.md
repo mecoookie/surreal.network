@@ -1,7 +1,10 @@
-# Surreal Apes web3
+# Surreal Apes
 
-A GANS generative art project  
-Open-sourced for transparency
+<p align="center">
+  <img src="./readme/logo.jpg">
+</p>
+
+A generative art project
 
 ## Official Links
 
