@@ -100,7 +100,7 @@ Integration contracts used to automate authorized processes such as minting, rev
 
 ---
 
-ECDSA based signature verification contract. Used to create arbitrary minting restrictions.
+ECDSA based signature verification contract. Used to create arbitrary minting restrictions. A more generalized **whitelist** mechanism.
 
 #### High Level Overview
 
