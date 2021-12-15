@@ -15,7 +15,6 @@ custom:
 
 package:
   include:
-    - wallet.json
     - BAYC.json
 
 provider:

@@ -1,5 +1,4 @@
 import { APIGatewayEvent } from 'aws-lambda';
-import walletJson from './wallet.json';
 import BAYC from './BAYC.json';
 import { Contract, Wallet } from 'ethers';
 import { sanitizedAddress } from './sanitize';
