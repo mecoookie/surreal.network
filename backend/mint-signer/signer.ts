@@ -8,7 +8,10 @@ const signingWallet: Wallet = Wallet.fromMnemonic(process.env.MNEMONIC ?? '');
 
 const BAYC_ADDRESS = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
 
-const web3Provider = new JsonRpcProvider(process.env.ALCHEMY, 'homestead');
+const web3Provider = new JsonRpcProvider(process.env.ALCHEMY, {
+  name: 'mainnet',
+  chainId: 1
+});
 
 const generateSignature = async (addressString: string) => {
   return await signingWallet.signMessage(sanitizedAddress(addressString));
