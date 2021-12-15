@@ -26,6 +26,7 @@ provider:
   timeout: 15
   environment:
     MNEMONIC: ${ssm:/surreal-signer-mnemonic}
+    ALCHEMY: ${ssm:/surreal-alchemy-url}
 
 functions:
   sign:
