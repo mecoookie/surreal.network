@@ -19,6 +19,8 @@ const generateSignature = async (addressString: string) => {
 };
 
 interface SignatureRequest {
+  // Since the contract expects msg.sender as the signed message, we don't need to ask
+  // the minter to sign locally before checking for apes.
   address: string;
 }
 
@@ -41,7 +43,7 @@ const handler = async (event: APIGatewayEvent) => {
 
     if (!(await verifyAddress(request.address))) {
       return {
-        statusCode: 500,
+        statusCode: 401,
         body: JSON.stringify({
           message: unauthorizedMessage
         })
