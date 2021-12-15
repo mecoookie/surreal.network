@@ -43,7 +43,11 @@ const handler = async (event: APIGatewayEvent) => {
         statusCode: 401,
         body: JSON.stringify({
           message: unauthorizedMessage
-        })
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        }
       };
     }
 
@@ -55,7 +59,11 @@ const handler = async (event: APIGatewayEvent) => {
       statusCode: 200,
       body: JSON.stringify({
         signature
-      })
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
     };
   } catch (error) {
     console.error(error);
@@ -63,7 +71,11 @@ const handler = async (event: APIGatewayEvent) => {
       statusCode: 500,
       body: JSON.stringify({
         message: 'Something went terribly wrong'
-      })
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
     };
   }
 };
