@@ -1,0 +1,44 @@
+service: surreal-mint-signer
+frameworkVersion: "2"
+variablesResolutionMode: 20210326
+
+custom:
+  customDomain:
+    domainName: api.harmonize.gg
+    basePath: "surreal/mintpass"
+    certificateName: "*.harmonize.gg"
+    createRoute53Record: true
+    endpointType: "regional"
+    apiType: http
+    securityPolicy: tls_1_2
+    stage: ${self:provider.stage}
+
+package:
+  include:
+    - BAYC.json
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  lambdaHashingVersion: "20201221"
+  stage: prod
+  timeout: 15
+  environment:
+    MNEMONIC: ${ssm:/surreal-signer-mnemonic}
+    ALCHEMY: ${ssm:/surreal-alchemy-url}
+
+functions:
+  sign:
+    handler: signer.handler
+    events:
+      - httpApi:
+          method: post
+          path: /sign
+          cors: true
+    environment:
+
+plugins:
+  - serverless-lift
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-domain-manager

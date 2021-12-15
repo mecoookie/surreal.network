@@ -219,6 +219,18 @@ describe('Surreal Tests', function () {
     ).to.be.revertedWith('ECDSA: invalid signature length');
 
     const signature = await generateSignature(sanitizedAddress(minterAddress));
+    await mintPassContract
+      .connect(minter)
+      .publicMint(minterAddress, 1, signature, {
+        value: parseEther('0.04')
+      });
+    expect(await mintPassContract.balanceOf(minterAddress, 1)).to.eq(1);
+  });
+
+  it("Cannot mint using someone else's address as signature", async () => {
+    await createMintPass(admin, '0.04', 100, 4, 'token1uri', true);
+    await mintPassContract.connect(admin).toggleSale(1);
+    const signature = await generateSignature(sanitizedAddress(minterAddress));
     await expect(
       mintPassContract
         .connect(secondMinter)
@@ -226,13 +238,6 @@ describe('Surreal Tests', function () {
           value: parseEther('0.04')
         })
     ).to.be.revertedWith('Requires valid signature');
-
-    await mintPassContract
-      .connect(minter)
-      .publicMint(minterAddress, 1, signature, {
-        value: parseEther('0.04')
-      });
-    expect(await mintPassContract.balanceOf(minterAddress, 1)).to.eq(1);
   });
 
   it('Each token has its own URI', async () => {
