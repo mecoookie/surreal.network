@@ -4,7 +4,4 @@ jspm_packages
 
 # Serverless directories
 .serverless
-
-wallet.json
-secrets.yml
-.env
+.build

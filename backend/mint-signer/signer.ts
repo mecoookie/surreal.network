@@ -1,14 +1,11 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import walletJson from './wallet.json';
 import BAYC from './BAYC.json';
-import { Contract, Signature, Wallet } from 'ethers';
+import { Contract, Wallet } from 'ethers';
 import { sanitizedAddress } from './sanitize';
 import { JsonRpcProvider } from '@ethersproject/providers';
 
-const signingWallet: Wallet = Wallet.fromEncryptedJsonSync(
-  JSON.stringify(walletJson),
-  process.env.WALLET_PASSWORD ?? ''
-);
+const signingWallet: Wallet = Wallet.fromMnemonic(process.env.MNEMONIC ?? '');
 
 const BAYC_ADDRESS = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
 
