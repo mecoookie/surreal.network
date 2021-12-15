@@ -150,6 +150,12 @@ ECDSA based signature verification contract. Used to create arbitrary minting re
 
 Thus any backend controller by surreal.network has the ability to first confirm that a wallet can maint a Mint-pass or redeem a Surreal.
 
+Since the `SignedMinting.sol` contract expects the signed message payload to contain the address of `msg.sender` (ie, the minter making the tx), users cannot get around this by providing a different address to our API. Further, our backend signer can be naive and not require a signed message from the minter prior to minting. See `test/index.ts`:
+
+```typescript
+it("Cannot mint using someone else's address as signature", async () => {...});
+```
+
 **Important**  
 When creating new restrictions/requiremets for signing, update the signature on contract using `_setMintingSigner`. If not updated: old signatures (prior restrictions) will still be valid.
 

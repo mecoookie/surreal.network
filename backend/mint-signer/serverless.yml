@@ -33,7 +33,7 @@ functions:
     handler: signer.handler
     events:
       - httpApi:
-          method: get
+          method: post
           path: /sign
           cors: true
     environment:
