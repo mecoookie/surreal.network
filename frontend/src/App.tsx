@@ -16,17 +16,6 @@ import dejen from "./images/dejen.png";
 import gerry from "./images/gerry.png";
 import asherah from "./images/asherah.png";
 
-import {
-  BriefcaseIcon,
-  CalendarIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  CurrencyDollarIcon,
-  LinkIcon,
-  LocationMarkerIcon,
-  PencilIcon,
-} from "@heroicons/react/solid";
-
 const navigation = [
   { name: "Mint Pass", href: "#", current: false },
   { name: "Redeem", href: "#", current: false },
@@ -85,9 +74,9 @@ export default function Example() {
                             smooth={true}
                             offset={50}
                             duration={500}
+                            to={item.name}
                             key={item.name}
                             href={item.href}
-                            to={item.name}
                             className={classNames(
                               item.current
                                 ? "bg-gray-900 text-white"
@@ -122,20 +111,30 @@ export default function Example() {
               <Disclosure.Panel className="md:hidden">
                 <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                   {navigation.map((item) => (
-                    <Disclosure.Button
+                    <Link
+                      spy={true}
+                      smooth={true}
+                      offset={50}
+                      duration={500}
+                      to={item.name}
                       key={item.name}
-                      as="a"
                       href={item.href}
-                      className={classNames(
-                        item.current
-                          ? "bg-gray-900 text-white"
-                          : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "block px-3 py-2 rounded-md text-base font-medium"
-                      )}
-                      aria-current={item.current ? "page" : undefined}
                     >
-                      {item.name}
-                    </Disclosure.Button>
+                      <Disclosure.Button
+                        key={item.name}
+                        as="a"
+                        href={item.href}
+                        className={classNames(
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "block px-3 py-2 rounded-md text-base font-medium"
+                        )}
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                        {item.name}
+                      </Disclosure.Button>
+                    </Link>
                   ))}
                 </div>
               </Disclosure.Panel>
