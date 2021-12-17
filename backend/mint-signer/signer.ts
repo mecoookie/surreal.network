@@ -1,5 +1,6 @@
 import { APIGatewayEvent } from 'aws-lambda';
 import BAYC from './BAYC.json';
+import MAYC from './MAYC.json';
 import { Contract, Wallet } from 'ethers';
 import { sanitizedAddress } from './sanitize';
 import { JsonRpcProvider } from '@ethersproject/providers';
@@ -7,6 +8,7 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 const signingWallet: Wallet = Wallet.fromMnemonic(process.env.MNEMONIC ?? '');
 
 const BAYC_ADDRESS = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d';
+const MAYC_ADDRESS = '0x60e4d786628fea6478f785a6d7e704777c86a7c6';
 
 const web3Provider = new JsonRpcProvider(process.env.ALCHEMY, {
   name: 'mainnet',
@@ -24,16 +26,26 @@ interface SignatureRequest {
 }
 
 const verifyAddress = async (address: string) => {
-  const contract = new Contract(BAYC_ADDRESS, BAYC, web3Provider);
-  return (await contract.balanceOf(address)) > 0;
+  const bayc = new Contract(BAYC_ADDRESS, BAYC, web3Provider);
+  const mayc = new Contract(MAYC_ADDRESS, MAYC, web3Provider);
+  return (
+    (await bayc.balanceOf(address)) > 0 || (await mayc.balanceOf(address)) > 0
+  );
 };
 
-const unauthorizedMessage = 'You must have a BAYC to mint';
+const unauthorizedMessage = 'You must have a BAYC or MAYC to mint';
+const headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Credentials': true
+};
 
 const handler = async (event: APIGatewayEvent) => {
   if (!event.body) {
     return {
-      statusCode: 400
+      statusCode: 400,
+      headers
     };
   }
 
@@ -46,10 +58,7 @@ const handler = async (event: APIGatewayEvent) => {
         body: JSON.stringify({
           message: unauthorizedMessage
         }),
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json'
-        }
+        headers
       };
     }
 
@@ -62,10 +71,7 @@ const handler = async (event: APIGatewayEvent) => {
       body: JSON.stringify({
         signature
       }),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
+      headers
     };
   } catch (error) {
     console.error(error);
@@ -74,10 +80,7 @@ const handler = async (event: APIGatewayEvent) => {
       body: JSON.stringify({
         message: 'Something went terribly wrong'
       }),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json'
-      }
+      headers
     };
   }
 };
