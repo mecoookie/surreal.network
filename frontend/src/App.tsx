@@ -153,6 +153,9 @@ export default function Example() {
                 <h2 className="ml-3 text-2xl font-bold leading-7 text-white sm:text-3xl sm:truncate">
                   SURREAL APES
                 </h2>
+                <h2 className="ml-3 text-lg font-bold leading-7 text-white sm:truncate">
+                  Phase 1
+                </h2>
                 <div className="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
                   <a
                     href="https://opensea.io/collection/surreal-mint-pass"
@@ -273,7 +276,7 @@ export default function Example() {
                         <div className="hover:bg-gray-600 text-blue-400 bg-gray-700 text-xs bg-secondary text-contrast py-3 px-1 rounded-lg shadow-sm text-center">
                           <p>ERC1155 Verified Smart Contract</p>
                           <p className="text-blue-400 font-bold">
-                            0x18d0e051317e04ae96314c372bd35220460eec62
+                            0x18d0e051...220460eec62
                           </p>
                         </div>
                       </a>
@@ -294,25 +297,30 @@ export default function Example() {
                     <img src={apes} />
                   </div>
                 </div>
-                <div className="mt-10 w-full max-w-xs">
+                <div className="mt-1 w-full max-w-xs">
                   <h2 className="text-4xl font-extrabold text-white sm:text-5xl sm:tracking-tight lg:text-6xl">
                     SURREAL APES
                   </h2>
                   <div className="text-xl text-gray-400">
-                    <div className="mt-5 flex flex-col gap-4">
+                    <div className="mt-8 flex flex-col gap-4">
                       <div>Burn your Mint Pass</div>
                       <div>Choose your BAYC/MAYC</div>
                       <div>Redeem matching SURREAL APE</div>
                     </div>
-                    <div className="mt-12 text-2xl font-bold">
+                    <div className="mt-8 text-2xl font-bold">
                       Redeeming Soon
                     </div>
-                    <div className="mt-12 hover:bg-gray-600 text-blue-400 bg-gray-700 text-xs bg-secondary text-contrast py-3 px-1 rounded-lg shadow-sm text-center">
-                      <p>ERC721 Verified Smart Contract</p>
-                      <p className="text-blue-400 font-bold">
-                        0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98
-                      </p>
-                    </div>
+                    <a
+                      href="https://etherscan.io/address/0xbc4aee331e970f6e7a5e91f7b911bdbfdf928a98"
+                      target="_blank"
+                    >
+                      <div className="mt-8 hover:bg-gray-600 text-blue-400 bg-gray-700 text-xs bg-secondary text-contrast py-3 px-1 rounded-lg shadow-sm text-center">
+                        <p>ERC721 Verified Smart Contract</p>
+                        <p className="text-blue-400 font-bold">
+                          0xbc4aee33...dbfdf928a98
+                        </p>
+                      </div>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -324,10 +332,6 @@ export default function Example() {
                     <h2 className="text-3xl font-extrabold text-white tracking-tight sm:text-4xl">
                       The Surreal Team
                     </h2>
-                    {/* <p className="text-xl text-gray-300">
-                      Ornare sagittis, suspendisse in hendrerit quis. Sed dui
-                      aliquet lectus sit pretium egestas vel mattis neque.
-                    </p> */}
                   </div>
                   <ul
                     role="list"
