@@ -265,7 +265,7 @@ export default function Example() {
                       <p className="text-lg">Max 4 per wallet</p>
                       <p className="text-lg">MAYC/BAYC Exclusive</p>
                       <p className="text-4xl text-emerald-500 font-bold">
-                        Minting 12/17
+                        Minting 12/17 7:00 PM Central (1:00 AM UTC)
                       </p>
                     </div>
                     <div className="mt-6 max-w-sm">
