@@ -23,7 +23,7 @@ export interface ContractInfo {
   paused: boolean;
   mintPrice: number;
   mintPriceString: string;
-  maxMintPerTx: number;
+  maxMintPerWallet: number;
   maxTokens: number;
   requiresSignature: boolean;
 }
@@ -68,7 +68,7 @@ const getContractInfo: ContractInfoFunction = async () => {
     paused,
     mintPrice: parseFloat(mintPriceString),
     mintPriceString,
-    maxMintPerTx: 4,
+    maxMintPerWallet: 4,
     maxTokens: 100,
     requiresSignature: true
   };
@@ -158,11 +158,11 @@ const mint = async (
   address: string,
   amount: number,
   signature: string,
-  { mintPrice, maxMintPerTx }: ContractInfo
+  { mintPrice, maxMintPerWallet }: ContractInfo
 ) => {
-  if (amount > maxMintPerTx) {
+  if (amount > maxMintPerWallet) {
     throw Error(
-      'You can only mint a maximum of ' + maxMintPerTx + 'NFTs per transaction.'
+      'You can only mint a maximum of ' + maxMintPerWallet + 'NFTs per wallet.'
     );
   }
   const contract = getContract();

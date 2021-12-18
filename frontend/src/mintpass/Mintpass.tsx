@@ -1,9 +1,4 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MinusIcon,
-  PlusIcon,
-} from "@heroicons/react/outline";
+import { MinusIcon, PlusIcon } from "@heroicons/react/outline";
 import React, { useEffect, useState } from "react";
 import {
   checkConnection,
@@ -19,8 +14,13 @@ import {
 } from "../services/wallet";
 import mintpass from "./../videos/mintpass.mp4";
 import "./mintpass.css";
+import opensea from "./../images/opensea.svg";
 
 interface Props {}
+
+function classNames(...classes: Array<string>) {
+  return classes.filter(Boolean).join(" ");
+}
 
 const Mintpass = (props: Props) => {
   const [mintAmount, setMintAmount] = useState(1);
@@ -60,7 +60,7 @@ const Mintpass = (props: Props) => {
     setMintAmount(
       Math.min(
         mintAmount + 1,
-        (contractInfo?.maxMintPerTx ?? 0) - (userInfo?.numberMinted ?? 0)
+        (contractInfo?.maxMintPerWallet ?? 0) - (userInfo?.numberMinted ?? 0)
       )
     );
   };
@@ -71,7 +71,9 @@ const Mintpass = (props: Props) => {
         const response = await connect();
         setConnection(response);
         const userInfo = await getUserInfo(response?.address ?? "");
-        setUserInfo(userInfo);
+        setUserInfo({
+          ...userInfo,
+        });
       } catch (error) {
         if (error instanceof Error) {
           setErrorMessage(error.message);
@@ -140,6 +142,19 @@ const Mintpass = (props: Props) => {
     return connection?.address && userInfo;
   };
 
+  const canMintMore = () => {
+    return (
+      (userInfo?.numberMinted ?? 0) < (contractInfo?.maxMintPerWallet ?? 0)
+    );
+  };
+
+  const isSoldOut = () => {
+    if (contractInfo === undefined) {
+      return false;
+    }
+    return contractInfo.totalMinted >= contractInfo.maxTokens;
+  };
+
   return (
     <div className="bg-gray-800 mt-8" id="Mint Pass">
       <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8 lg:flex lg:justify-between">
@@ -159,120 +174,150 @@ const Mintpass = (props: Props) => {
               <p className="text-lg">MAYC/BAYC Exclusive</p>
             </div>
 
-            <div className="flex flex-col gap-2 mt-8">
-              {validUser() ? (
-                <>
-                  <h1 className="text-2xl font-medium">How many?</h1>
-                  <h1 className="text-2xl">{mintAmount}</h1>
-                  <div className="max-w-sm">
-                    <span className="relative z-0 inline-flex shadow-sm rounded-md">
-                      <button
-                        type="button"
-                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-teal-100"
-                        onClick={decrementMintAmount}
-                      >
-                        <span className="sr-only">Less</span>
-                        <MinusIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
-                      <button
-                        type="button"
-                        className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-teal-100"
-                        onClick={incrementMintAmount}
-                      >
-                        <span className="sr-only">More</span>
-                        <PlusIcon className="h-5 w-5" aria-hidden="true" />
-                      </button>
-                    </span>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
-            </div>
-
-            <div className="mt-4 max-w-sm">
-              {mintStatus === MintStatus.TX_PENDING ? (
-                <div className="flex flex-col gap-2">
-                  <h1 className="text-xl mt-4">
-                    Your{" "}
-                    <a
-                      className="text-green-400"
-                      href={"https://etherscan.io/tx/" + mintTx}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      transaction
-                    </a>{" "}
-                    is pending
-                  </h1>
-                  <span className="loader"></span>
-                </div>
-              ) : validUser() ? (
-                <button
-                  onClick={validUser() ? mintClicked : connectWalletPressed}
+            {isSoldOut() ? (
+              <div className="mt-12 flex font-semibold flex-col gap-2 text-sky-700">
+                <div className="text-6xl">Sold Out!</div>
+                <span>Buy Mint Pass #1</span>
+                <a
+                  href="https://opensea.io/collection/surreal-mint-pass"
+                  target="_blank"
+                  className={classNames("py-2 rounded-md text-sm font-medium")}
+                  aria-current={"page"}
                 >
-                  <div className="hover:bg-emerald-400 text-white bg-emerald-600 text-xs bg-secondary text-contrast py-3 px-6 w-52 rounded-lg shadow-sm text-center">
-                    <h1 className="text-lg font-bold">
-                      {connection?.address !== undefined
-                        ? "Mint"
-                        : "Connect Wallet"}
-                    </h1>
+                  <div className="flex items-center text-sm">
+                    <img
+                      className="flex-shrink-0 mr-1.5 h-5 w-5"
+                      aria-hidden="true"
+                      src={opensea}
+                    />
+                    Open Sea
                   </div>
-                </button>
-              ) : (
-                <h1>
-                  Mint Pass #1 is MAYC/BAYC exclusive. We'll open it up more for
-                  future passes!
-                </h1>
-              )}
-              {mintStatus === MintStatus.COMPLETE ? (
-                <h1 className="text-xl mt-4">
-                  Your mint{" "}
-                  <a
-                    className="text-green-400"
-                    href={"https://etherscan.io/tx/" + mintTx}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    transaction
-                  </a>{" "}
-                  was successful!
-                </h1>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="flex flex-col gap-0 mt-6">
-              {validUser() ? (
-                <>
-                  <p className="text-xl text-emerald-800">
-                    {connection?.address.substring(0, 5) +
-                      "..." +
-                      connection?.address.substring(
-                        38,
-                        connection.address.length
-                      )}{" "}
-                  </p>
-                  <p className="text-xl text-emerald-800">
-                    {userInfo?.numberMinted ?? 0}/4 Max Minted
-                  </p>
-                  {errorMessage ? (
-                    <p className="text-xl text-red-700">
-                      {errorMessage.substring(
-                        0,
-                        errorMessage.indexOf("(") > -1
-                          ? errorMessage.indexOf("(")
-                          : errorMessage.length
-                      )}
-                    </p>
+                </a>
+              </div>
+            ) : (
+              <div>
+                <div className="flex flex-col gap-2 mt-8">
+                  {validUser() && canMintMore() ? (
+                    <>
+                      <h1 className="text-2xl font-medium">How many?</h1>
+                      <h1 className="text-2xl">{mintAmount}</h1>
+                      <div className="max-w-sm">
+                        <span className="relative z-0 inline-flex shadow-sm rounded-md">
+                          <button
+                            type="button"
+                            className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-teal-100"
+                            onClick={decrementMintAmount}
+                          >
+                            <span className="sr-only">Less</span>
+                            <MinusIcon className="h-5 w-5" aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-teal-100"
+                            onClick={incrementMintAmount}
+                          >
+                            <span className="sr-only">More</span>
+                            <PlusIcon className="h-5 w-5" aria-hidden="true" />
+                          </button>
+                        </span>
+                      </div>
+                    </>
                   ) : (
                     ""
                   )}
-                </>
-              ) : (
-                ""
-              )}
-            </div>
+                </div>
+
+                <div className="mt-2 max-w-sm">
+                  {mintStatus === MintStatus.TX_PENDING ? (
+                    <div className="flex flex-col gap-2">
+                      <h1 className="text-xl mt-4">
+                        Your{" "}
+                        <a
+                          className="text-green-400"
+                          href={"https://etherscan.io/tx/" + mintTx}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          transaction
+                        </a>{" "}
+                        is pending
+                      </h1>
+                      <span className="loader"></span>
+                    </div>
+                  ) : (validUser() && canMintMore()) ||
+                    connection === undefined ? (
+                    <button
+                      onClick={validUser() ? mintClicked : connectWalletPressed}
+                    >
+                      <div className="hover:bg-emerald-400 text-white bg-emerald-600 text-xs bg-secondary text-contrast py-3 px-6 w-52 rounded-lg shadow-sm text-center">
+                        <h1 className="text-lg font-bold">
+                          {connection?.address !== undefined
+                            ? "Mint"
+                            : "Connect Wallet"}
+                        </h1>
+                      </div>
+                    </button>
+                  ) : validUser() && !canMintMore() ? (
+                    <h1 className="text-emerald-300">
+                      You've minted all {contractInfo?.maxMintPerWallet ?? 0} of
+                      your NFTs!
+                    </h1>
+                  ) : (
+                    <h1>
+                      Mint Pass #1 is MAYC/BAYC exclusive. We'll open it up more
+                      for future passes!
+                    </h1>
+                  )}
+                  {mintStatus === MintStatus.COMPLETE ? (
+                    <h1 className="text-xl mt-4">
+                      Your mint{" "}
+                      <a
+                        className="text-green-400"
+                        href={"https://etherscan.io/tx/" + mintTx}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        transaction
+                      </a>{" "}
+                      was successful!
+                    </h1>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="flex flex-col gap-0 mt-6">
+                  {validUser() ? (
+                    <>
+                      <p className="text-xl text-emerald-800">
+                        {connection?.address.substring(0, 5) +
+                          "..." +
+                          connection?.address.substring(
+                            38,
+                            connection.address.length
+                          )}{" "}
+                      </p>
+                      <p className="text-xl text-emerald-800">
+                        {userInfo?.numberMinted ?? 0}/4 Minted
+                      </p>
+                      {errorMessage ? (
+                        <p className="text-xl text-red-700">
+                          {errorMessage.substring(
+                            0,
+                            errorMessage.indexOf("(") > -1
+                              ? errorMessage.indexOf("(")
+                              : errorMessage.length
+                          )}
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </div>
+            )}
             <div className="max-w-sm">
               <a
                 href="https://etherscan.io/address/0x18d0e051317e04ae96314c372bd35220460eec62"
@@ -288,7 +333,7 @@ const Mintpass = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className="mt-10 w-full max-w-xs">
+        <div className="mt-10 w-full max-w-md">
           <div className="mt-1.5 relative">
             <video src={mintpass} autoPlay muted loop></video>
           </div>
