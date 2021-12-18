@@ -5,14 +5,18 @@ import {
 } from '@ethersproject/providers';
 import { BigNumber } from '@ethersproject/bignumber';
 import * as ethers from 'ethers';
-import { Surreal, SurrealMintPassFactory } from '../contracts/typechain';
-import * as SurrealMintPassFactoryABI from '../contracts/artifacts/SurrealMintPassFactory.json';
+import { SurrealMintPassFactory } from '../contracts/typechain';
+import SurrealMintPassFactoryABI from '../contracts/artifacts/SurrealMintPassFactory.json';
 import axios, { AxiosError } from 'axios';
 
 declare let window: any;
 let provider: Web3Provider;
-let alchemyProvider = new JsonRpcProvider('');
+let alchemyProvider = new JsonRpcProvider(
+  'https://eth-mainnet.alchemyapi.io/v2/YoBi2T8SqjgNZVmbqF8ddfq9zmEaIaLx'
+);
 const SURREAL_MINTPASS_ADDRESS = '0x18d0e051317e04ae96314c372bd35220460eec62';
+const SURREAL_MINTPASS_ADDRESS_RINKEBY =
+  '0xa2526f15c474935a7634ef383d478e893f7f54ac';
 
 export interface ContractInfo {
   totalMinted: number;
@@ -22,6 +26,11 @@ export interface ContractInfo {
   maxMintPerTx: number;
   maxTokens: number;
   requiresSignature: boolean;
+}
+
+export interface UserInfo {
+  numberMinted: number;
+  signature: string;
 }
 
 export enum MintStatus {
@@ -36,7 +45,7 @@ export interface ConnectionResponse {
   address: string;
 }
 
-export interface SignatureResponse {
+interface SignatureResponse {
   signature: string;
 }
 
@@ -109,7 +118,7 @@ const checkConnection = async () => {
 
 const validateNetwork = async () => {
   const network = await provider.detectNetwork();
-  if (network.chainId !== 1) {
+  if (network.chainId !== 1 && network.chainId !== 4) {
     throw Error(
       'Your wallet is currently connected to ' +
         (network.name === 'unknown' ? 'an ' : 'the ') +
@@ -119,12 +128,22 @@ const validateNetwork = async () => {
   }
 };
 
-const getSignature = async (address: string) => {
+const getUserInfo = async (address: string) => {
   try {
     const response = (
-      await axios.get('https://defer.finance/address/' + address)
+      await axios.post('https://api.harmonize.gg/surreal/mintpass/sign', {
+        address
+      })
     ).data as SignatureResponse;
-    return response;
+    const contract = getContract();
+    const numberMinted = (await contract.balanceOf(address, 1)).toNumber();
+
+    const userInfo: UserInfo = {
+      numberMinted,
+      signature: response.signature
+    };
+
+    return userInfo;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       const errorMessage = (error as AxiosError).toJSON() as ErrorResponse;
@@ -171,12 +190,16 @@ const listen = async (hash: string) => {
 };
 
 const getContract = (web3Provider: JsonRpcProvider | undefined = undefined) => {
+  let contractAddress = SURREAL_MINTPASS_ADDRESS;
+  if (provider !== undefined && provider.network.name === 'rinkeby') {
+    contractAddress = SURREAL_MINTPASS_ADDRESS_RINKEBY;
+  }
   const contract = new ethers.Contract(
-    SURREAL_MINTPASS_ADDRESS,
+    contractAddress,
     SurrealMintPassFactoryABI,
     provider ? provider.getSigner() : web3Provider
   ) as SurrealMintPassFactory;
   return contract;
 };
 
-export { listen, mint, checkConnection, connect, getContractInfo };
+export { listen, mint, checkConnection, connect, getContractInfo, getUserInfo };

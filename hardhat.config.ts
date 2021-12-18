@@ -89,8 +89,7 @@ const config: HardhatUserConfig = {
   },
   abiExporter: {
     path: frontendContractRoot + 'artifacts',
-    flat: true,
-    only: ['Surreal*']
+    flat: true
   },
   typechain: {
     outDir: frontendContractRoot + 'typechain'
