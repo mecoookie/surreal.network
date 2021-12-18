@@ -1,0 +1,6 @@
+.exit
+signer
+signer.address
+const signer = ethers.Wallet.fromMnemonic("venture night wife now mammal own depend town lend pipe champion lizard")
+const wallet = Wallet.fromMnemonic("venture night wife now mammal own depend town lend pipe champion lizard")
+const signingWallet: Wallet = Wallet.fromMnemonic("venture night wife now mammal own depend town lend pipe champion lizard

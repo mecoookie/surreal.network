@@ -23,6 +23,8 @@ provider:
   lambdaHashingVersion: "20201221"
   stage: prod
   timeout: 15
+  httpApi:
+    cors: true
   environment:
     MNEMONIC: ${ssm:/surreal-signer-mnemonic}
     ALCHEMY: ${ssm:/surreal-alchemy-url}
@@ -34,7 +36,6 @@ functions:
       - httpApi:
           method: post
           path: /sign
-          cors: true
     environment:
 
 plugins:

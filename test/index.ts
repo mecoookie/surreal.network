@@ -1,20 +1,22 @@
 import { Signer } from '@ethersproject/abstract-signer';
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
-import { boolean } from 'hardhat/internal/core/params/argumentTypes';
-import { Surreal, SurrealMintPassFactory } from '../typechain';
+import {
+  Surreal,
+  SurrealMintPassFactory
+} from '../frontend/src/contracts/typechain';
 
 const getSurrealContract = async () => {
   const Surreal = await ethers.getContractFactory('Surreal');
   const admin = (await ethers.getSigners())[1];
   const signer = (await ethers.getSigners())[2];
   const dev = (await ethers.getSigners())[3];
-  const contract = await Surreal.deploy(
+  const contract: Surreal = (await Surreal.deploy(
     signer.address,
     admin.address,
     [admin.address, dev.address],
     [75, 25]
-  );
+  )) as Surreal;
   return contract;
 };
 
@@ -25,14 +27,14 @@ const getMintPassContract = async (surrealContract: Surreal) => {
   const admin = (await ethers.getSigners())[1];
   const signer = (await ethers.getSigners())[2];
   const dev = (await ethers.getSigners())[3];
-  const contract = await SurrealMintPass.deploy(
+  const contract = (await SurrealMintPass.deploy(
     signer.address, // signer
     admin.address, // admin
     dev.address, // dev address
     surrealContract.address, // surreal contract
     [admin.address, dev.address], // payment splitter
     [75, 25]
-  );
+  )) as SurrealMintPassFactory;
   await surrealContract.connect(admin).setMintPassContract(contract.address);
   return contract;
 };
